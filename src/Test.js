@@ -77,7 +77,7 @@ const Test = () => {
         
         return zwischenSumme
     }, 0) // 0 ist start punkt für zwichenSumme
-  localStorage.setItem("punkte",summe)
+  localStorage.setItem("testpunkte",summe)
 
         ergebniscomponent.push("/Ergebnis")
 

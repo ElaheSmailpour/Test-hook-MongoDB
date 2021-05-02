@@ -8,12 +8,13 @@ const Ergebnis = () => {
     const [bestanden, setBestanden] = useState(false)
     useEffect(() => {
         if (punktZahl === null) {
-            let speicher = localStorage.getItem("punkte")
+            let speicher = localStorage.getItem("testpunkte")
             if (speicher >= 17) {
                 setBestanden(true)
             }
             setpunktZahl(speicher)
         }
+
 
     }, [punktZahl])
 

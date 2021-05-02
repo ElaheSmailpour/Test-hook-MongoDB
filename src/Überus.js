@@ -11,7 +11,7 @@ const Überus = () => {
             
           <button onClick={info}>Überus</button>
           {showinfo ?
-          <p>Wir sind WorldCode, eine Gruppe von Webentwicklern mit Sitz in Berlin und Düsseldorf. Unser Vorschlag ist, dass Sie sich komplett online auf den Einbürgerungstest vorbereiten.<br /> Wir wüschen Ihnen viel Erfolg und viel Spaß!</p>
+          <p>Bei der Prüfung bekommen Sie ein Testheft mit 33 Fragen. Sie haben 60 Minuten Zeit, die Fragen zu beantworten. Bei jeder Frage müssen Sie aus vier möglichen Antworten die richtige Antwort auswählen. Wenn Sie mindestens 17 Fragen richtig beantworten, haben Sie den Test bestanden!</p>
           : ""}
         </div>
     )
