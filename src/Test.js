@@ -2,10 +2,11 @@
 
 //elternteil 
 
-
+import { useHistory } from 'react-router-dom'
 
 import Fragen from "./Fragen";
 import { useState } from "react";
+
 
 
 
@@ -60,13 +61,26 @@ const Test = () => {
     }
 
     const results = () => {
-let summe=ergebnis.reduce((zwischenSumme, aktullewert)=>{
-    if (aktullewert){
-        zwischenSumme=zwischenSumme + 1
+        let summe = ergebnis.reduce((zwischenSumme, aktullewert) => {
+           
+                zwischenSumme = zwischenSumme + aktullewert
+            
+            return zwischenSumme
+        }, 0) // 0 ist start punkt für zwichenSumme
+        setanzahlrichtige(summe)
     }
-    return zwischenSumme
-},0)
-setanzahlrichtige(summe)
+    const ergebniscomponent = useHistory()
+    const Testbeenden=()=>{
+        let summe = ergebnis.reduce((zwischenSumme, aktullewert) => {
+           
+            zwischenSumme = zwischenSumme + aktullewert
+        
+        return zwischenSumme
+    }, 0) // 0 ist start punkt für zwichenSumme
+  localStorage.setItem("punkte",summe)
+
+        ergebniscomponent.push("/Ergebnis")
+
     }
 
     return (
@@ -127,7 +141,7 @@ setanzahlrichtige(summe)
                         <div className="testläuft">
                             <div className="containerButton">
                                 <button className="nextAndLastButton" onClick={VorherigeAufgabe}>Vorherige Aufgabe</button>
-
+                                <button className="nextAndLastButton" onClick={Testbeenden}>Test beenden</button>
                                 <button className="nextAndLastButton" onClick={NächsteAufgabe}>Nächste Aufgabe</button>
                             </div>
 
