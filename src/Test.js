@@ -2,7 +2,7 @@
 
 //elternteil 
 
-import { useHistory } from 'react-router-dom'
+
 
 import Fragen from "./Fragen";
 import { useState } from "react";
@@ -16,8 +16,7 @@ const Test = () => {
 
     const [questionIndex, setQuestionIndex] = useState(0)
     const [testläuft, setTestläuft] = useState(false)
-    const [anzahlrichtige, setanzahlrichtige] = useState(0)
-    const [ergebnis, setErgebnis] = useState([])
+  
 
 
 
@@ -28,15 +27,17 @@ const Test = () => {
         const land = document.querySelector("#stats").value;
 
         Promise.all([
-            fetch("http://localhost:5000/RandomQuestion").then(res => res.json()),
-            fetch(`http://localhost:5000/RandomQuestion/${land}`).then(res => res.json())
+            fetch(process.env.REACT_APP_BACKENDURL + "RandomQuestion").then(res => res.json()),
+            fetch(process.env.REACT_APP_BACKENDURL + `RandomQuestion/${land}`).then(res => res.json())
+
         ]).then(([urlOneData, urlTwoData]) => {
             console.log("urlOneData=", urlOneData)
             console.log("urlTwoData=", urlTwoData)
             console.log("mergedData=", [...urlOneData, ...urlTwoData])
             setData([...urlOneData, ...urlTwoData]);
 
-        })
+            
+                })
 
     }
 
@@ -54,36 +55,9 @@ const Test = () => {
 
 
     }
-    const aktualisiereErgebnis = (antwort, indexfrage) => {
-        let copyergebnis = [...ergebnis]
-        copyergebnis[indexfrage] = antwort
-        setErgebnis(copyergebnis)
-    }
+   
 
-    const results = () => {
-        let summe = ergebnis.reduce((zwischenSumme, aktullewert) => {
-           
-                zwischenSumme = zwischenSumme + aktullewert
-            
-            return zwischenSumme
-        }, 0) // 0 ist start punkt für zwichenSumme
-        setanzahlrichtige(summe)
-    }
-    const ergebniscomponent = useHistory()
-    const Testbeenden=()=>{
-        let summe = ergebnis.reduce((zwischenSumme, aktullewert) => {
-           
-            zwischenSumme
-             = zwischenSumme + aktullewert
-        
-        return zwischenSumme
-    }, 0) // 0 ist start punkt für zwichenSumme
-    
-  localStorage.setItem("testpunkte",summe)
-
-        ergebniscomponent.push("/Ergebnis")
-
-    }
+   
 
     return (
 
@@ -133,8 +107,7 @@ const Test = () => {
 
                         propsQuestionLänge={data.length}
                         propsQuestionIndex={questionIndex}
-                        antwortHandler={aktualisiereErgebnis}
-
+                      
                     >
 
                     </Fragen>}
@@ -143,14 +116,11 @@ const Test = () => {
                         <div className="testläuft">
                             <div className="containerButton">
                                 <button className="nextAndLastButton" onClick={VorherigeAufgabe}>Vorherige Aufgabe</button>
-                                <button className="nextAndLastButton" onClick={Testbeenden}>Test beenden</button>
+                               
                                 <button className="nextAndLastButton" onClick={NächsteAufgabe}>Nächste Aufgabe</button>
                             </div>
 
 
-                            <p >Ihre Punkte ist:
-                            <button id="punkte" onClick={results}>{anzahlrichtige} </button>
-                            </p>
                         </div>
 
 

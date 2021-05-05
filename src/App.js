@@ -1,3 +1,4 @@
+import dotenv from "dotenv"
 import React from 'react'
 import {
   BrowserRouter as Router,
@@ -9,9 +10,8 @@ import Ergebnis from "./Ergebnis"
 import Home from "./Home"
 import Start from './Start';
 import Test from './Test';
-
 import NichtGefunden from "./NichtGefunden"
-
+dotenv.config()
 function App() {
   return (
     // Router Komponente als oberstes Element:

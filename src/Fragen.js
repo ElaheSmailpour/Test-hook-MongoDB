@@ -1,65 +1,151 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState, useEffect } from 'react';
 
-const Fragen = ({ propsQuestion, propsQuestionLänge, propsQuestionIndex,antwortHandler }) => {
-    const [showAnswer, setshowAnswer] = useState({
+import Fragen from "./Fragen";
+import { useState } from "react";
 
-        optionSelected: undefined
-    })
-    useEffect(() => {
-        setshowAnswer({
+
+
+const Test = () => {
+
+    const [data, setData] = useState([]);
+
+    const [questionIndex, setQuestionIndex] = useState(0)
+    const [testläuft, setTestläuft] = useState(false)
+  
+
+    
+    const teststarten = () => {
+      
+        setTestläuft(true)
+        const land = document.querySelector("#stats").value;
+       
+
+        Promise.all([
+            fetch(process.env.REACT_APP_BACKENDURL + "RandomQuestion").then(res => res.json()),
+            fetch(process.env.REACT_APP_BACKENDURL + `RandomQuestion/${land}`).then(res => res.json())
+
+        ]).then(([urlOneData, urlTwoData]) => {
+            console.log("urlOneData=", urlOneData)
+            console.log("urlTwoData=", urlTwoData)
+            console.log("mergedData=", [...urlOneData, ...urlTwoData])
+            setData([...urlOneData, ...urlTwoData]);
+
            
-            optionSelected: undefined
-        })
-    }, [])
+              
 
-    const AnwserButton = (option) => {
+            }
 
-        setshowAnswer({
-           
-            optionSelected: option
-        })
+  )
+
 
     }
 
+  
+    const VorherigeAufgabe = () => {
+
+        if (questionIndex !== 0)
+            setQuestionIndex(questionIndex - 1)
+
+    }
+
+    const NächsteAufgabe = () => {
+        if (questionIndex < data.length - 1)
+            setQuestionIndex(questionIndex + 1)
+
+
+    }
+
+
+
+   
+    
+
     return (
-        <div className="FragenAngaben">
 
-            <h1 className={"FragenAngabenText"}>Test:{propsQuestionIndex + 1} / {propsQuestionLänge}</h1>
-            <p className={"FragenAngabenText"}>{propsQuestion.question}</p>
-            {propsQuestion.image &&
-                <img src={"http://localhost:5000/images/" + propsQuestion.image} alt="ein Bild" />
 
-            }
-            <ul>
-                {propsQuestion.answer.map((answerItem, answerIndex) =>
+        <div className="body-testSeite">
+      
 
-                    <li>
-                        <button onClick={() => { AnwserButton(answerItem)
-                          if(propsQuestion.correct === answerIndex ){
-                            antwortHandler(true,propsQuestionIndex)
-                        }
-                        else {
-                            antwortHandler(false,propsQuestionIndex) 
-                        }
-                         } }>
-                            {answerItem}
+            {!testläuft ?
+
+                <div className="bundesländer">
+                    <label id="bundesländerselect">Bundesländer auswählen : </label>
+                    <select id="stats" name="stats">
+
+                        <option value="Baden-Württemberg">Baden-Württemberg </option>
+                        <option value="Bayern">Bayern </option>
+                        <option value="Berlin">Berlin</option>
+                        <option value="Brandenburg">Brandenburg </option>
+                        <option value="Bremen">Bremen</option>
+                        <option value="Hamburg">Hamburg</option>
+                        <option value="Hessen">Hessen</option>
+                        <option value="Mecklenburg-Vorpommern">Mecklenburg-Vorpommern</option>
+                        <option value="Niedersachsen">Niedersachsen</option>
+                        <option value="Nordrhein-Westfalen">Nordrhein-Westfalen</option>
+                        <option value="Rheinland-Pfalz">Rheinland-Pfalz</option>
+                        <option value="Saarland">Saarland</option>
+                        <option value="Sachsen">Sachsen</option>
+                        <option value="Sachsen-Anhalt">Sachsen-Anhalt</option>
+                        <option value="Schleswig-Holstein">Schleswig-Holstein </option>
+                        <option value="Thüringen">Thüringen</option>
+
+                    </select>
+                </div>
+
+                : ""}
+
+                <div className="teststarten">
+                  
+                        <button id="teststarten" onClick={teststarten}>Test starten</button>
+
+                     
+
+                  
+
+                        {data.length > 0 && <Fragen propsQuestion={data[questionIndex]}
+
+                            propsQuestionLänge={data.length}
+                            propsQuestionIndex={questionIndex}
                           
-                        &nbsp; 
-                      
-                        {showAnswer.optionSelected === answerItem ? <i class="fas fa-check"></i> : ""}
-                        </button>
-                      
+                        >
+
+                        </Fragen>}
+                 
+
+                            <div className="testläuft">
+                                <div className="containerButton">
+                                    <button className="nextAndLastButton" onClick={VorherigeAufgabe}>Vorherige Aufgabe</button>
+                                  
+                                    <button className="nextAndLastButton" onClick={NächsteAufgabe}>Nächste Aufgabe</button>
+                                </div>
+
+                              
                         
-                        {propsQuestion.correct === answerIndex && showAnswer.optionSelected === answerItem && <span className="text-success">{"Richtige Antwort"}</span>}
-                        {showAnswer.optionSelected === answerItem && propsQuestion.correct !== answerIndex && <span className="text-danger">{"Falsche Antwort"}</span>}
-                    </li>
-                )}
-            </ul>
+
+
+                                
+
+                            </div>
+
+
+
+
+         
+
+                </div>
+
+              
 
 
         </div>
+
+
+
+
     )
+
 }
 
-export default Fragen
+export default Test;
+
+
+
