@@ -1,151 +1,77 @@
-
-import Fragen from "./Fragen";
-import { useState } from "react";
+//kinderteil
 
 
 
-const Test = () => {
+import React, { useState, useEffect } from 'react';
 
-    const [data, setData] = useState([]);
+const Fragen = ({ propsQuestion, propsQuestionLänge, propsQuestionIndex}) => {
 
-    const [questionIndex, setQuestionIndex] = useState(0)
-    const [testläuft, setTestläuft] = useState(false)
-  
 
-    
-    const teststarten = () => {
-      
-        setTestläuft(true)
-        const land = document.querySelector("#stats").value;
-       
+    const [showAnswer, setshowAnswer] = useState({
 
-        Promise.all([
-            fetch(process.env.REACT_APP_BACKENDURL + "RandomQuestion").then(res => res.json()),
-            fetch(process.env.REACT_APP_BACKENDURL + `RandomQuestion/${land}`).then(res => res.json())
+        
+        optionSelected: undefined
+    })
 
-        ]).then(([urlOneData, urlTwoData]) => {
-            console.log("urlOneData=", urlOneData)
-            console.log("urlTwoData=", urlTwoData)
-            console.log("mergedData=", [...urlOneData, ...urlTwoData])
-            setData([...urlOneData, ...urlTwoData]);
+   
 
+    useEffect(() => {
+        setshowAnswer({
            
-              
+            optionSelected: undefined
+
+        })
+
+    }, [])
+
+    const anwserButton = (option) => {
+
+        setshowAnswer({
+           
+            optionSelected: option
+        })
+        
+
+    }
+
+    return (
+        <div className="FragenAngaben">
+         
+            <h1 className="Anzahlfrage">Aufgabe: {propsQuestionIndex + 1} / {propsQuestionLänge}</h1>
+            <p className="FragenAngabenText">{propsQuestion.question}</p>
+            {propsQuestion.image &&
+               <div className="imageTestSeiteDiv"><img  src={process.env.REACT_APP_BACKENDURL  + "images/" + propsQuestion.image} alt="ein Bild" /></div> 
+               
+               
 
             }
 
-  )
+            <ul>
+                {propsQuestion.answer.map((answerItem, answerIndex) =>
 
+                    <li key={answerIndex} id="liste">
+                        <button id="antwortButton" onClick={() => {
 
-    }
+                            anwserButton(answerItem);
+                           
+                        }}>{answerItem}
+                         &nbsp; 
+                           {showAnswer.optionSelected ===answerItem ? <i class="fas fa-check-circle"></i> : ""} 
+                        </button> 
 
-  
-    const VorherigeAufgabe = () => {
-
-        if (questionIndex !== 0)
-            setQuestionIndex(questionIndex - 1)
-
-    }
-
-    const NächsteAufgabe = () => {
-        if (questionIndex < data.length - 1)
-            setQuestionIndex(questionIndex + 1)
-
-
-    }
-
-
-
-   
-    
-
-    return (
-
-
-        <div className="body-testSeite">
-      
-
-            {!testläuft ?
-
-                <div className="bundesländer">
-                    <label id="bundesländerselect">Bundesländer auswählen : </label>
-                    <select id="stats" name="stats">
-
-                        <option value="Baden-Württemberg">Baden-Württemberg </option>
-                        <option value="Bayern">Bayern </option>
-                        <option value="Berlin">Berlin</option>
-                        <option value="Brandenburg">Brandenburg </option>
-                        <option value="Bremen">Bremen</option>
-                        <option value="Hamburg">Hamburg</option>
-                        <option value="Hessen">Hessen</option>
-                        <option value="Mecklenburg-Vorpommern">Mecklenburg-Vorpommern</option>
-                        <option value="Niedersachsen">Niedersachsen</option>
-                        <option value="Nordrhein-Westfalen">Nordrhein-Westfalen</option>
-                        <option value="Rheinland-Pfalz">Rheinland-Pfalz</option>
-                        <option value="Saarland">Saarland</option>
-                        <option value="Sachsen">Sachsen</option>
-                        <option value="Sachsen-Anhalt">Sachsen-Anhalt</option>
-                        <option value="Schleswig-Holstein">Schleswig-Holstein </option>
-                        <option value="Thüringen">Thüringen</option>
-
-                    </select>
-                </div>
-
-                : ""}
-
-                <div className="teststarten">
-                  
-                        <button id="teststarten" onClick={teststarten}>Test starten</button>
-
+                       
                      
-
                   
 
-                        {data.length > 0 && <Fragen propsQuestion={data[questionIndex]}
+                        { propsQuestion.correct === answerIndex && showAnswer.optionSelected === answerItem}
+                        {showAnswer.optionSelected === answerItem && propsQuestion.correct !== answerIndex}
 
-                            propsQuestionLänge={data.length}
-                            propsQuestionIndex={questionIndex}
-                          
-                        >
-
-                        </Fragen>}
-                 
-
-                            <div className="testläuft">
-                                <div className="containerButton">
-                                    <button className="nextAndLastButton" onClick={VorherigeAufgabe}>Vorherige Aufgabe</button>
-                                  
-                                    <button className="nextAndLastButton" onClick={NächsteAufgabe}>Nächste Aufgabe</button>
-                                </div>
-
-                              
-                        
-
-
-                                
-
-                            </div>
-
-
-
-
-         
-
-                </div>
-
-              
-
-
+                    </li>
+                )}
+            </ul>
         </div>
 
-
-
-
     )
-
 }
 
-export default Test;
-
-
-
+export default Fragen
