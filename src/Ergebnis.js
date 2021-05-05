@@ -11,6 +11,7 @@ const Ergebnis = () => {
             let speicher = localStorage.getItem("testpunkte")
             if (speicher >= 17) {
                 setBestanden(true)
+                
             }
             setpunktZahl(speicher)
         }

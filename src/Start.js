@@ -7,7 +7,7 @@ const Start = () => {
           <h1>Einbürgerungstest</h1>
            
            <button> <Link to="/Home">Home</Link></button>
-           <button> <Link to='/Startseite'>Start den Test</Link></button>
+           <button> <Link to='/Startseite'>zum Test</Link></button>
        
         </div>
     )

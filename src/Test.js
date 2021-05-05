@@ -73,10 +73,12 @@ const Test = () => {
     const Testbeenden=()=>{
         let summe = ergebnis.reduce((zwischenSumme, aktullewert) => {
            
-            zwischenSumme = zwischenSumme + aktullewert
+            zwischenSumme
+             = zwischenSumme + aktullewert
         
         return zwischenSumme
     }, 0) // 0 ist start punkt für zwichenSumme
+    
   localStorage.setItem("testpunkte",summe)
 
         ergebniscomponent.push("/Ergebnis")
